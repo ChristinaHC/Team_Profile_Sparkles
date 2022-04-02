@@ -1,29 +1,13 @@
-const Engineer = require("../lib/engineer");
+const Engineer = require("../lib/Engineer");
 
-describe("Engineer", () => {
-    let Nela;
+test("Should retrieve and engeineers GitHub", () => {
+    const newEngineer = new Engineer("Nela", 1, "borrowedandblue@gmail.com", "nelacrabtree")
 
-    beforeEach(() => {
-        Nela = new Engineer("Nela", 1, "borrowedandblue@gmail.com", "ChristinaHC")
-    });
+    expect(newEngineer.getGitHub()).toBe("nelacrabtree")
+})
 
-    describe("Create new Engineer object", () => {
+test("Should check the employee type from user input and then display 'Engineer'", () => {
+    const newEngineer = new Engineer("Nela", 1, "borrowedandblue@gmail.com", "nelacrabtree")
 
-        it("Should create a new Engineer object", () => {
-
-            expect(Nela.name).toBe("Nela")
-            expect(Nela.id).toBe(1)
-            expect(Nela.email).toBe("borrowedandblue@gmail.com")
-            expect(Nela.github).toBe("ChristinaHC")
-        });
-
-        it("Should get Engineer github username", () => {
-
-            expect(Nela.getGithub()).toBe("ChristinaHC")
-        });
-
-        it("Should get Engineer role", () => {
-            expect(Nela.getRole()).toBe("Engineer")
-        });
-    });
-});
+    expect(newEngineer.getRole()).toBe("Engineer")
+})

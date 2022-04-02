@@ -1,26 +1,26 @@
 {
   "name": "team_profile_sparkles",
   "version": "1.0.0",
-  "description": "",
+  "description": "Challenge 10",
   "main": "index.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ChristinaHC/Team_Profile_Sparkles.git"
+    "url": "git+https://github.com/christinahc/team_profile_sparkles.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ChristinaHC/Team_Profile_Sparkles/issues"
+    "url": "https://github.com/christinahc/team_profile_sparkles/issues"
   },
-  "homepage": "https://github.com/ChristinaHC/Team_Profile_Sparkles#readme",
+  "homepage": "https://github.com/christinahc/team_profile_sparkles#readme",
   "dependencies": {
     "inquirer": "^8.2.0",
-    "jest": "^27.4.7"
+    "jest": "^27.4.5"
   }
 }

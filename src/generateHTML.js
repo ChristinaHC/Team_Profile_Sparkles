@@ -1,78 +1,4 @@
-
-
-const printManager = pageData => {
-    return `
-        <div class="card shadow">
-            <div class="card-header text-dark" style="background-color: lavenderblush;">
-              <h3>${pageData.managerName}</h3>
-              <span>
-                   Manager
-              </span>
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">ID: ${pageData.managerId}</li>
-                    <li class="list-group-item">Email: <a href="mailto:${pageData.managerEmail}">${pageData.managerEmail}</a></li>
-                    <li class="list-group-item">Office Number: ${pageData.managerOffice}</li>
-                  </ul>
-            </div>
-        </div>
-    `
-}
-
-const printEngineers = engineerArr => {
-    if (engineerArr) {
-        return engineerArr.map(engineer => {
-            return `
-            <div class="card shadow">
-                <div class="card-header text-dark" style="background-color: lavenderblush;">
-                  <h3>${engineer.engineerName}</h3>
-                  <span>
-                   Engineer
-                  </span>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">ID: ${engineer.engineerId}</li>
-                        <li class="list-group-item">Email: <a href="mailto:${engineer.engineerEmail}">${engineer.engineerEmail}</a></li>
-                        <li class="list-group-item">Github: <a href="https://github.com/${engineer.engineerGithub}" target="_blank">${engineer.engineerGithub}</a></li>
-                      </ul>
-                </div>
-            </div>`
-        }).join('')
-    } else {
-        return '';
-    }
-}
-
-const printInterns = internArr => {
-    if (internArr) {
-        return internArr.map(intern => {
-            return `
-            <div class="card shadow">
-                <div class="card-header text-dark" style="background-color: lavenderblush;">
-                  <h3>${intern.internName}</h3>
-                  <span>
-                   Intern
-                  </span>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">ID: ${intern.internId}</li>
-                        <li class="list-group-item">Email: <a href="mailto:${intern.internEmail}">${intern.internEmail}</a></li>
-                        <li class="list-group-item">School: ${intern.internSchool}</li>
-                      </ul>
-                </div>
-            </div>`
-        }).join('')
-    } else {
-        return '';
-    }
-}
-
-
-
-const generateHTML = pageData => {
+function generateHTML(employeeArray) {
     return `
     <!DOCTYPE html>
 <html lang="en">
@@ -80,28 +6,53 @@ const generateHTML = pageData => {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="./style.css">
-    <script src="https://kit.fontawesome.com/cb341cc7fd.js" crossorigin="anonymous"></script>
-    <title>Team Information</title>
+    <title>My Team</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
 </head>
-<body style="background-color: black;">
-    <nav class="navbar navbar-light" style="background-color: purple;">
-        <div class="container-fluid d-flex justify-content-center">
-          <a class="navbar-brand text-light fs-1" href="#">My Team</a>
-        </div>
-      </nav>
-      <section id="cards">
-      ${printManager(pageData)}
-      ${printEngineers(pageData.engineers)}
-      ${printInterns(pageData.interns)}
-        
-          
-      </section>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<body>
+  <div class="title-container">
+      <h1>My Team</h1>
+    </div>
+    <div class="card-container">
+      ${employeeArray.map(employee => {
+          return createCard(employee);
+      })
+      .join("\n\n")
+    }
+  </div>
 </body>
 </html>
-`
-}
+  `;
+  }
 
-module.exports = generateHTML;
+  function createCard(employee) {
+    let thirdProp = ""
+    let icon = ""
+      if (employee.getRole() === "Manager") {
+        thirdProp = `Office Number: ${employee.getOfficeNumber()}`;
+        icon = "<i class='fas fa-crown'></i>"
+      } else if (employee.getRole() === "Engineer") {
+        thirdProp = `GitHub: <a href="https://github.com/${employee.getGithub()}" target="_blank">${employee.getGithub()}</a>`;
+        icon = "<i class='fas fa-cogs'></i>"
+      } else if (employee.getRole() === "Intern") {
+        thirdProp = `School: ${employee.getSchool()}`;
+        icon = "<i class='fas fa-user-graduate'></i>"
+      }
+      return `
+      <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">${employee.getName()}</h5>
+        <p class="card-text">${icon}     ${employee.getRole()}</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">ID: ${employee.getId()}</li>
+        <li class="list-group-item">Email: <a href="mailto:${employee.getEmail()}">${employee.getEmail()}</a></li>
+        <li class="list-group-item">${thirdProp}</li>
+      </ul>
+    </div>
+    `;
+  }
+  
+  module.exports = generateHTML;

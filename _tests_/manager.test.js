@@ -1,24 +1,13 @@
-const Manager = require("../lib/manager");
+const Manager = require('../lib/Manager');
 
-describe("Manager", () => {
-    let Nela;
+test("Should retrieve and display office number of Manager", () => {
+    const newManager = new Manager("Nela", 1, "borrowedandblue@gmail.com", 10)
 
-    beforeEach(() => {
-        Nela = new Manager("Nela", 1, "borrowedandblue@gmail.com", 123)
-    });
+    expect(newManager.getOfficeNumber()).toBe(10)
+})
 
-    describe("Create new Manager object", () => {
+test("Should check employee type and display 'Manager'", () => {
+    const newManager = new Manager("Nela", 1, "borrowedandblue@gmail.com", 10)
 
-        it("Should create a new Manager object", () => {
-
-            expect(Nela.name).toBe("Nela")
-            expect(Nela.id).toBe(1)
-            expect(Nela.email).toBe("borrowedandblue@gmail.com")
-            expect(Nela.officeNumber).toBe(123)
-        });
-
-        it("Should get Manager role", () => {
-            expect(Nela.getRole()).toBe("Manager")
-        });
-    });
-});
+    expect(newManager.getRole()).toBe("Manager")
+})

@@ -1,53 +1,125 @@
 const inquirer = require("inquirer");
-const { genQuestions, engineerQuestions, internQuestions } = require("./src/questions");
+const fs = require("fs");
+const Manager = require("./lib/manager");
+const Engineer = require("./lib/engineer");
+const Intern = require("./lib/intern");
 const generateHTML = require("./src/generateHTML");
-const writeHTML = require("./src/writeHTML");
+const employeeArray = [];
 
-const gen = () => {
-    return inquirer.prompt(genQuestions);
-};
+function createManager() {
+    inquirer
+    .prompt([
+        {
+            type: "input",
+            name: "name",
+            message: "What is the Manager's name?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is the Manager's ID number?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is the Manager's email address?"
+        },
+        {
+            type: "input",
+            name: "officeNumber",
+            message: "What is the Manager's office number?"
+        }
+    ])
+    .then(answers => {
+        const manager = new Manager(answers.name, answers.id, answers.email, answers.officeNumber)
+        employeeArray.push(manager);
+        addTeamMember();
+    }) 
+}
 
-const promptEngineer = projectData => {
-    if (!projectData.engineers)  {
-        projectData.engineers = [];
-    }
-    return inquirer.prompt(engineerQuestions)
-    .then(newEngineerData => {
-        projectData.engineer.push(newEngineerData)
-        if (newEngineerData.addEmployee === "engineer") {
-            promptEngineer(projectData);
-        } else if (newEngineerData.addEmployee === "intern") {
-            promptIntern(projectData);
+function addTeamMember() {
+    inquirer
+    .prompt([
+        {
+            type: "list",
+            name: "addEmployee",
+            message: "Would you like to add another employee?",
+            choices: ["Add an engineer", "Add an intern", "I'm done building my team!"]
+        }
+    ])
+    .then(answers => {
+        if (answers.addEmployee == "Add an engineer") {
+            createEngineer();
+        } else if (answers.addEmployee == "Add an intern") {
+            createIntern();
         } else {
-            writeHTML(generateHTML(projectData));
-        };
-    });
-};
+            const generatedHTML = generateHTML(employeeArray);
+            fs.writeFile("./dist/index.html", generatedHTML, () => {
+                console.log("HTML was successfully generated!")
+            });
+        }
+    })
+}
 
-const promptIntern = projectData => {
-    if (!projectData.intern) {
-        projectData.intern = [];
-    }
-    return inquirer.prompt(internQuestions)
-    .then(newInternData => {
-        projectData.intern.push(newInternData)
-        if (newInternData.addEmployee === "Intern") {
-            promptIntern(projectData)
-        } else if (newInternData.addEmployee === "engineer") {
-            promptEngineer(projectData);
-        } else {
-            writeHTML(generateHTML(projectData));
-        };
-    });
-};
+function createEngineer() {
+    inquirer
+    .prompt([
+        {
+            type: "input",
+            name: "name",
+            message: "What is the engineer's name?"        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is the engineer's ID number?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is the Engineer's email address?"
+        },
+        {
+            type: "input",
+            name: "github",
+            message: "What is the engineer's GitHub username?"
+        }
+    ])
+    .then(answers => {
+        const engineer = new Engineer(answers.name, answers.id, answers.email, answers.github)
+        employeeArray.push(engineer);
+        addTeamMember();
+    }) 
+}
 
-gen()
-    .then(data => {
-        if (data.addEmployee === "engineer") {
-            promptEngineer(data)
-        } else if (data.addEmployee === "intern") {
-            promptIntern(data)
-        } else {
-            writeHTML(generateHTML(data));
-        };
-    });
+function createIntern() {
+    inquirer
+    .prompt([
+        {
+            type: "input",
+            name: "name",
+            message: "What is the the intern's name?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is the intern's ID number?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is the intern's email address?"
+        },
+        {
+            type: "input",
+            name: "school",
+            message: "What school does the intern attend?"
+        }
+    ])
+    .then(answers => {
+        const intern = new Intern(answers.name, answers.id, answers.email, answers.school)
+        employeeArray.push(intern);
+        addTeamMember();
+    }) 
+}
+
+createManager();
